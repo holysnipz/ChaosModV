@@ -67,6 +67,9 @@ namespace TwitchChatVotingProxy.VotingReceiver
 
         public async Task SendMessage(string message)
         {
+            while (!m_IsReady)
+                await Task.Delay(100);
+
             if (m_Client is null || m_GuildId is null || m_ChannelId is null)
                 return;
 
