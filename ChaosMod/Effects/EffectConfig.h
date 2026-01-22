@@ -15,7 +15,7 @@ class EffectData;
 
 namespace EffectConfig
 {
-	inline size_t GetNextDelimiterOffset(const std::string &input)
+	inline size_t GetNextDelimiterOffset(std::string_view input)
 	{
 		bool isInQuotes = false;
 		if (input.length() > 0)
@@ -53,7 +53,7 @@ namespace EffectConfig
 		std::string valueEffectName;
 	};
 
-	inline ConfigValues GetConfigValuesIni(OptionsFile &effectsFile, const std::string_view &effectId)
+	inline ConfigValues GetConfigValuesIni(OptionsFile &effectsFile, std::string_view effectId)
 	{
 		ConfigValues configValues;
 		auto value = effectsFile.ReadValue<std::string>({ std::string(effectId) });
@@ -101,7 +101,7 @@ namespace EffectConfig
 		return object.contains(name) ? object.at(name).get<T>() : defaultValue;
 	}
 
-	inline ConfigValues GetConfigValuesJson(OptionsFile &effectsFile, const std::string_view &effectId)
+	inline ConfigValues GetConfigValuesJson(OptionsFile &effectsFile, std::string_view effectId)
 	{
 		ConfigValues configValues;
 		auto value = effectsFile.ReadValue<nlohmann::json::object_t>({ std::string(effectId) });
@@ -116,15 +116,11 @@ namespace EffectConfig
 			configValues.Values.WeightMult         = GetIfPresent(value, "weightMult", 0);
 			configValues.valueEffectName           = GetIfPresent(value, "customName", std::string());
 		}
-		else
-		{
-			LOG("WARNING: Config value for effect " << effectId << " not found!");
-		}
 
 		return configValues;
 	}
 
-	inline bool GetConfigFromMetadata(OptionsFile &effectsFile, const std::string_view &effectId,
+	inline bool GetConfigFromMetadata(OptionsFile &effectsFile, std::string_view effectId,
 	                                  RegisteredEffectMetadata &effectMetadata, EffectData &outData, bool isJson)
 	{
 		ConfigValues configValues =

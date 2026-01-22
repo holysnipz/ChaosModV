@@ -1,8 +1,13 @@
 #include "../vendor/CodeDependencies.iss"
 
+#define VerFile FileOpen("..\version.txt")
+#define AppVer FileRead(VerFile)
+#expr FileClose(VerFile)
+#undef VerFile
+
 [Setup]
 AppName=Chaos Mod
-AppVersion=2.2-beta
+AppVersion={#AppVer}
 DefaultDirName=""
 DisableDirPage=yes
 CreateAppDir=no
@@ -14,10 +19,14 @@ OutputBaseFilename="ChaosModInstaller"
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 
+[Dirs]
+Name: "{app}"; 
+Name: "{app}/chaosmod"; Permissions: everyone-full
+
 [Files]
-Source: "src/ChaosMod.asi"; DestDir: "{app}"; Flags: ignoreversion
-Source: "src/chaosmod/*"; DestDir: "{app}/chaosmod"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "src/README.txt"; DestDir: "{app}/chaosmod"; Flags: ignoreversion isreadme
+Source: "src/ChaosMod.asi"; DestDir: "{app}"; Flags: ignoreversion; Permissions: everyone-full
+Source: "src/chaosmod/*"; DestDir: "{app}/chaosmod"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-full
+Source: "src/README.txt"; DestDir: "{app}/chaosmod"; Flags: ignoreversion isreadme; Permissions: everyone-full
 
 [Code]
 function HasGtaInFolder(Folder: String): Boolean;

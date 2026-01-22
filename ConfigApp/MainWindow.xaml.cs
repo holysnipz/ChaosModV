@@ -133,7 +133,7 @@ namespace ConfigApp
 
             try
             {
-                string newVersion = await httpClient.GetStringAsync("https://gopong.dev/chaos/version.txt");
+                string newVersion = await httpClient.GetStringAsync("https://raw.githubusercontent.com/gta-chaos-mod/ChaosModV/refs/heads/master/version.txt");
 
                 if (Info.VERSION != newVersion)
                     update_available_button.Visibility = Visibility.Visible;
@@ -268,6 +268,10 @@ namespace ConfigApp
                     if (m_EffectDataMap is not null)
                         m_EffectDataMap[effectMisc.EffectId] = effectData;
                     menuItem.IsColored = effectData.TimedType == EffectTimedType.Permanent;
+                };
+                menuItem.OnCheckedClick = () =>
+                {
+                    effectData.Enabled = menuItem.IsChecked;
                 };
                 menuItem.IsColored = effectData.TimedType == EffectTimedType.Permanent;
                 menuItem.IsChecked = effectData.Enabled ?? true;
@@ -435,7 +439,7 @@ namespace ConfigApp
 
         public void OpenModPageEvent(object sender, RoutedEventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("https://www.gta5-mods.com/scripts/chaos-mod-v-beta");
+            Utils.OpenURL("https://www.gta5-mods.com/scripts/chaos-mod-v-beta");
         }
     }
 }
